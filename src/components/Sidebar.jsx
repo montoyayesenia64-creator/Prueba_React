@@ -23,9 +23,13 @@ export default function Sidebar({
       aria-label="Menú principal"
     >
       <NavLink className="sidebar-marca" to="/dashboard" onClick={onNavigate}>
-        <span className="brand-symbol">
-          <Icon name="printer" />
-        </span>
+        <img
+          className="sidebar-logo"
+          src={`${import.meta.env.BASE_URL}logo2.jpeg`}
+          alt="Logo de PrintSmart 3D"
+          width="25"
+          height="25"
+        />
         <span className="nav-label">PrintSmart 3D</span>
       </NavLink>
       <button

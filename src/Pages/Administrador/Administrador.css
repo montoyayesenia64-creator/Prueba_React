@@ -46,6 +46,14 @@
   white-space: nowrap;
   border-bottom: 1px solid var(--border);
 }
+.sidebar-logo {
+  display: block;
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  object-fit: contain;
+  border-radius: 6px;
+}
 .brand-symbol {
   display: grid;
   place-items: center;
