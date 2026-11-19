@@ -1,0 +1,506 @@
+
+/* ==========================================
+   ESTILOS GENERALES DE PRINTSMART 3D
+========================================== */
+
+/* Contenedor principal de Inicio */
+.pagina-inicio {
+    width: 100%;
+    background-color: #15121D;
+    color: white;
+}
+
+
+/* ==========================================
+   SECCIÓN DE PRESENTACIÓN
+==========================================  */
+
+/* Organiza el texto y el logo */
+.presentacion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    padding: 60px 8%;
+    min-height: 500px;
+}
+
+/* Contenedor del texto de bienvenida */
+.informacion-inicio {
+    width: 55%;
+    min-width: 0;
+    text-align: left;
+}
+
+/* Título principal */
+.informacion-inicio h1 {
+    color: white;
+    font-size: 36px;
+    line-height: 1.3;
+    margin: 0 0 20px;
+}
+
+/* Nombre de la empresa en morado */
+.informacion-inicio h1 span {
+    color: #B66AFF;
+}
+
+/* Eslogan */
+.informacion-inicio h2 {
+    color: #C084FC;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Descripción */
+.informacion-inicio p {
+    color: #E5E1EB;
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+/* Botón para explorar el catálogo */
+.btn-catalogo {
+    display: inline-block;
+    background-color: #7915D5;
+    color: white;
+    text-decoration: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+/* Cambio de color al pasar el mouse */
+.btn-catalogo:hover {
+    background-color: #A855F7;
+}
+
+
+/* ==========================================
+   LOGO DE LA EMPRESA
+========================================== */
+
+/* Contenedor del logo */
+.imagen-presentacion {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Tamaño del logo */
+.imagen-presentacion img {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+
+/* ==========================================
+   SECCIÓN DEL CATÁLOGO
+========================================== */
+
+/* Contenedor del catálogo */
+.catalogo {
+    background-color: #100D17;
+    padding: 60px 5%;
+    text-align: center;
+}
+
+/* Título */
+.catalogo h2 {
+    color: #B66AFF;
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+/* Descripción del catálogo */
+.catalogo > p {
+    color: #E5E1EB;
+    font-size: 16px;
+    margin-bottom: 35px;
+}
+
+/* Organiza los productos en tres columnas */
+.productos {
+    display: grid;
+
+    /* Tres productos por fila */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    /* Separación entre tarjetas */
+    gap: 25px;
+
+    width: 100%;
+
+    /* Iguala la altura de las tarjetas de cada fila */
+    align-items: stretch;
+}
+
+
+/* ==========================================
+   TARJETAS DE PRODUCTOS
+========================================== */
+
+/* Diseño de cada tarjeta */
+.tarjeta-producto {
+    background-color: #211A2D;
+    border: 1px solid #543474;
+    border-radius: 12px;
+
+    /* Oculta contenido que sobresalga */
+    overflow: hidden;
+
+    min-width: 0;
+
+    /* Organiza imagen e información verticalmente */
+    display: flex;
+    flex-direction: column;
+
+    text-align: left;
+}
+
+
+/* ==========================================
+   FOTOGRAFÍAS DE LOS PRODUCTOS
+========================================== */
+
+/* Contenedor de imagen y controles */
+.carrusel-producto {
+    width: 100%;
+    background-color: #191321;
+
+    /* Imagen arriba y controles abajo */
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+/* Fotografías del catálogo */
+.carrusel-producto img {
+    display: block;
+
+    /* Mismo espacio para todas las fotografías */
+    width: 100%;
+    height: 340px;
+
+    /* Muestra toda la fotografía sin recortarla */
+    object-fit: contain;
+
+    /* Centra la fotografía */
+    object-position: center;
+
+    /* Evita que se comprima */
+    flex-shrink: 0;
+
+    background-color: #191321;
+}
+
+
+/* ==========================================
+   CONTROLES DEL CARRUSEL
+========================================== */
+
+/* Organiza las flechas y el contador */
+.controles-carrusel {
+    display: flex;
+
+    /* Flechas a los extremos */
+    justify-content: space-between;
+
+    /* Elementos centrados verticalmente */
+    align-items: center;
+
+    width: 100%;
+    padding: 12px 15px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+
+    background-color: #191321;
+}
+
+/* Botones de las flechas */
+.controles-carrusel button {
+    background-color: #7915D5;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 9px 14px;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+/* Efecto al pasar el mouse */
+.controles-carrusel button:hover {
+    background-color: #A855F7;
+}
+
+/* Número de fotografía */
+.controles-carrusel span {
+    color: white;
+    font-size: 14px;
+    text-align: center;
+}
+
+
+/* ==========================================
+   INFORMACIÓN DEL PRODUCTO
+========================================== */
+
+/* Contenedor de nombre, descripción y precio */
+.informacion-producto {
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    /* Ocupa el espacio disponible */
+    flex: 1;
+}
+
+/* Nombre del producto */
+.informacion-producto h3 {
+    color: white;
+    font-size: 20px;
+    margin: 0 0 12px;
+}
+
+/* Descripción */
+.informacion-producto p {
+    color: #D0D0D8;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 18px;
+}
+
+/* Precio */
+.informacion-producto h4 {
+    color: #C084FC;
+    font-size: 20px;
+
+    /* Mantiene el precio cerca de los botones */
+    margin: auto 0 18px;
+}
+
+
+/* ==========================================
+   BOTONES DE COMPRA Y CARRITO
+========================================== */
+
+/* Organiza los dos botones en una fila */
+.botones-producto {
+    display: flex;
+
+    /* Separación entre los botones */
+    gap: 10px;
+
+    width: 100%;
+}
+
+/* Estilos que comparten los dos botones */
+.btn-carrito,
+.btn-comprar {
+    /* Cada botón ocupa la mitad del espacio */
+    flex: 1;
+
+    /* Evita que el texto desborde la tarjeta */
+    min-width: 0;
+
+    /* Mantiene ambos botones del mismo alto */
+    min-height: 45px;
+
+    padding: 10px 8px;
+    border-radius: 7px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    /* Centra el texto de los botones */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Botón Agregar al carrito */
+.btn-carrito {
+    background-color: #352247;
+    color: white;
+
+    /* Borde morado */
+    border: 1px solid #79529C;
+}
+
+/* Efecto del botón Agregar */
+.btn-carrito:hover {
+    background-color: #543474;
+}
+
+/* Botón Comprar ahora */
+.btn-comprar {
+    background-color: #7915D5;
+    color: white;
+    border: 1px solid #7915D5;
+}
+
+/* Efecto del botón Comprar */
+.btn-comprar:hover {
+    background-color: #A855F7;
+}
+
+
+/* ==========================================
+   SECCIÓN ¿QUIÉNES SOMOS?
+========================================== */
+
+/* Contenedor de información de la empresa */
+.nosotros {
+    background-color: #15121D;
+    padding: 60px 10%;
+    text-align: center;
+}
+
+/* Título */
+.nosotros h2 {
+    color: #B66AFF;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+/* Descripción */
+.nosotros p {
+    color: #E5E1EB;
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+
+/* ==========================================
+   SECCIÓN DE CONTACTO
+========================================== */
+
+/* Contenedor de contacto */
+.contacto {
+    background-color: #100D17;
+    padding: 60px 10%;
+    text-align: center;
+}
+
+/* Título */
+.contacto h2 {
+    color: #B66AFF;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+/* Información de contacto */
+.contacto p {
+    color: #E5E1EB;
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+
+/* ==========================================
+   PANTALLAS MEDIANAS
+========================================== */
+
+@media (max-width: 1000px) {
+
+    /* Dos productos por fila */
+    .productos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* Ajusta el espacio de las fotografías */
+    .carrusel-producto img {
+        height: 300px;
+    }
+}
+
+
+/* ==========================================
+   TABLETAS
+========================================== */
+
+@media (max-width: 768px) {
+
+    /* Presentación en columna */
+    .presentacion {
+        flex-direction: column;
+        padding: 40px 5%;
+        gap: 30px;
+    }
+
+    /* Centra la bienvenida */
+    .informacion-inicio {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Reduce el título */
+    .informacion-inicio h1 {
+        font-size: 30px;
+    }
+
+    /* Ajusta el logo */
+    .imagen-presentacion {
+        width: 100%;
+    }
+
+    .imagen-presentacion img {
+        max-width: 280px;
+    }
+}
+
+
+/* ==========================================
+   CELULARES
+========================================== */
+
+@media (max-width: 600px) {
+
+    /* Un producto por fila */
+    .productos {
+        grid-template-columns: 1fr;
+    }
+
+    /* Reduce espacios del catálogo */
+    .catalogo {
+        padding: 40px 5%;
+    }
+
+    /* Ajusta las fotografías */
+    .carrusel-producto img {
+        height: 300px;
+    }
+
+    /* Ajusta los títulos */
+    .catalogo h2,
+    .nosotros h2,
+    .contacto h2 {
+        font-size: 25px;
+    }
+
+    /* Reduce espacios de las secciones */
+    .nosotros,
+    .contacto {
+        padding: 40px 5%;
+    }
+
+    /* Ajusta la información del producto */
+    .informacion-producto {
+        padding: 20px;
+    }
+}
