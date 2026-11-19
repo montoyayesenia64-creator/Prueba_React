@@ -1,3 +1,8 @@
+/**
+ * @file Resumen ejecutivo con agregados de ejemplo y cambios del estado local.
+ * La telemetría, variaciones y serie histórica son ilustrativas; no hay conexión
+ * con impresoras ni una consulta de ingresos históricos a un servidor.
+ */
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppData } from "../context/AppContext";
@@ -12,11 +17,15 @@ import {
 import ActivityList from "../components/ActivityList";
 import BarChart from "../components/BarChart";
 import { exportPDF } from "../utils/export";
+/**
+ * @param {{search: string, onHistory: () => void}} props Búsqueda y apertura del historial.
+ */
 export default function Dashboard({ search, onHistory }) {
   const { orders, materials, activity, money, notify } = useAppData();
   const [days, setDays] = useState(30);
   const [dateOpen, setDateOpen] = useState(false);
   const [exporting, setExporting] = useState(false);
+  // El ingreso de trabajos completados se suma a la base de 28.500.000 del ejemplo.
   const addedRevenue = orders
     .filter((item) => item.status === "Completado")
     .reduce((sum, item) => sum + item.amount, 0);
@@ -24,6 +33,8 @@ export default function Dashboard({ search, onHistory }) {
     25 +
     orders.filter((item) => !["Completado", "Rechazado"].includes(item.status))
       .length;
+  // Compara stock actual con la semilla para aplicar la variación al agregado 428.5 kg.
+  // Se excluyen litros: no se pueden sumar unidades de volumen a kilogramos.
   const initialStock = initialMaterials
     .filter((item) => item.unit === "kg")
     .reduce((sum, item) => sum + item.stock, 0);
@@ -33,6 +44,7 @@ export default function Dashboard({ search, onHistory }) {
       .filter((item) => item.unit === "kg")
       .reduce((sum, item) => sum + item.stock, 0) -
     initialStock;
+  // Los periodos escalan los datos de ejemplo; no filtran una serie fechada real.
   const factor = days / 30;
   const income = (28500000 + addedRevenue) * factor;
   const filteredActivity = activity.filter((item) =>
@@ -40,6 +52,7 @@ export default function Dashboard({ search, onHistory }) {
       .toLowerCase()
       .includes(search.toLowerCase()),
   );
+  // Une coincidencias de pedidos y materiales con enlaces a su módulo de gestión.
   const matches = search.trim()
     ? [
         ...orders
@@ -64,6 +77,7 @@ export default function Dashboard({ search, onHistory }) {
           })),
       ]
     : [];
+  /** Exporta los indicadores actuales y la actividad que coincide con la búsqueda. */
   const pdf = async () => {
     setExporting(true);
     try {

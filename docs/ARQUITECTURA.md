@@ -1,5 +1,7 @@
 # Arquitectura y reglas de negocio
 
+Para recorrer cada archivo y sus funciones, consulta [la guía del código](CODIGO.md). Las explicaciones de implementación también están junto a las funciones y componentes mediante comentarios en español y JSDoc.
+
 ## Organización
 
 ```text

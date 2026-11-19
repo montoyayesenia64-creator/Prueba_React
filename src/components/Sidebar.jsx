@@ -1,5 +1,7 @@
+/** @file Menú lateral: marca, navegación, nuevo trabajo, ayuda y cierre de sesión. */
 import { NavLink } from "react-router-dom";
 import { Icon } from "./UI";
+// Cada entrada define [ruta, texto visible, nombre del icono de Bootstrap].
 const options = [
   ["dashboard", "Panel de Control", "grid-1x2"],
   ["materiales", "Materiales", "box-seam"],
@@ -9,6 +11,18 @@ const options = [
   ["usuarios", "Usuarios", "people"],
   ["configuracion", "Configuración", "gear"],
 ];
+/**
+ * Presenta el menú; su estado y las acciones pertenecen a Administrador.jsx.
+ * NavLink calcula la opción activa a partir de la ruta, sin duplicar ese estado.
+ * El logo procede de public/logo2.jpeg; BASE_URL respeta la base definida en Vite.
+ * @param {object} props Propiedades de presentación y callbacks del contenedor.
+ * @param {boolean} props.collapsed Indica si solo deben verse los iconos en escritorio.
+ * @param {() => void} props.onToggle Alterna el menú contraído.
+ * @param {() => void} props.onNewJob Abre el formulario global de trabajo.
+ * @param {() => void} props.onHelp Abre el centro de ayuda.
+ * @param {() => void} props.onLogout Solicita el cierre de sesión de demostración.
+ * @param {() => void} props.onNavigate Cierra el menú móvil tras navegar.
+ */
 export default function Sidebar({
   collapsed,
   onToggle,

@@ -1,7 +1,17 @@
+/**
+ * @file Componentes visuales reutilizables basados en clases de Bootstrap.
+ * No conocen los registros del negocio: reciben contenido, estado y callbacks.
+ */
 import { useEffect, useRef } from "react";
+/** Icono decorativo de Bootstrap Icons; el control que lo contiene aporta su nombre accesible. */
 export function Icon({ name, className = "" }) {
   return <i className={`bi bi-${name} ${className}`} aria-hidden="true" />;
 }
+/**
+ * Botón con variante Bootstrap e icono opcional.
+ * Por defecto type="button" evita envíos accidentales; ...props permite indicar
+ * type="submit", onClick, disabled y atributos de accesibilidad cuando se necesitan.
+ */
 export function Button({
   children,
   icon,
@@ -20,6 +30,7 @@ export function Button({
     </button>
   );
 }
+/** Cabecera de página: título, subtítulo opcional y controles recibidos en children. */
 export function PageHeader({ title, subtitle, children }) {
   return (
     <div className={`page-heading ${subtitle ? "" : "compact"}`}>
@@ -31,6 +42,11 @@ export function PageHeader({ title, subtitle, children }) {
     </div>
   );
 }
+/**
+ * Tarjeta de indicador: label describe value; tone y changeTone son clases de color.
+ * change es una etiqueta visual que la página calcula o proporciona como ejemplo.
+ * children permite incorporar contenido adicional, como una minigráfica.
+ */
 export function StatCard({
   label,
   value,
@@ -56,9 +72,11 @@ export function StatCard({
     </article>
   );
 }
+/** Etiqueta breve para mostrar un estado con el color semántico indicado por tone. */
 export function Badge({ children, tone = "purple" }) {
   return <span className={`status-badge ${tone}`}>{children}</span>;
 }
+/** Mensaje e icono para colecciones vacías o detalles todavía sin seleccionar. */
 export function EmptyState({
   text = "No hay resultados para esta búsqueda.",
   icon = "search",
@@ -70,6 +88,10 @@ export function EmptyState({
     </div>
   );
 }
+/**
+ * Interruptor controlado: checked viene del padre y onChange recibe un booleano.
+ * La etiqueta envuelve el input para que el texto también permita activarlo.
+ */
 export function Switch({ label, description, checked, onChange }) {
   return (
     <label className="switch-row">
@@ -87,9 +109,19 @@ export function Switch({ label, description, checked, onChange }) {
     </label>
   );
 }
-/** Diálogo nativo: contiene el foco, admite Escape y devuelve el foco al cerrar. */
+/**
+ * Diálogo nativo: showModal() contiene el foco y crea el fondo de superposición.
+ * Escape solicita onClose; el padre desmonta el componente para cerrar el diálogo.
+ * Al desmontar devuelve el foco al elemento que estaba activo antes de abrirlo.
+ * @param {object} props Contenido y control del diálogo.
+ * @param {string} props.title Título vinculado al diálogo por aria-labelledby.
+ * @param {import('react').ReactNode} props.children Cuerpo del diálogo.
+ * @param {() => void} props.onClose Callback que actualiza el estado del padre.
+ * @param {boolean} [props.wide=false] Activa la variante de mayor anchura.
+ */
 export function Modal({ title, children, onClose, wide = false }) {
   const ref = useRef(null);
+  // Solo se abre al montar; la limpieza también permite trabajar con StrictMode.
   useEffect(() => {
     const previous = document.activeElement;
     const dialog = ref.current;

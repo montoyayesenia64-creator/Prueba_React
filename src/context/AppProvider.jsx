@@ -1,3 +1,8 @@
+/**
+ * @file Estado de aplicación: inventario, pedidos, usuarios, ajustes e historial.
+ * Las colecciones persisten con usePersistentState; el aviso temporal solo vive
+ * en memoria. No realiza peticiones a un backend ni autentica usuarios.
+ */
 import { useEffect, useRef, useState } from "react";
 import { AppContext } from "./AppContext";
 import { usePersistentState } from "../hooks/usePersistentState";
@@ -8,7 +13,12 @@ import {
   initialSettings,
   initialUsers,
 } from "../data/initialData";
+/**
+ * Proporciona los datos compartidos y renderiza un único aviso global.
+ * @param {{children: import('react').ReactNode}} props Contenido del panel.
+ */
 export default function AppProvider({ children }) {
+  // El sufijo v1 identifica el esquema guardado; cada dominio tiene su propia clave.
   const [materials, setMaterials] = usePersistentState(
     "printsmart.materials.v1",
     initialMaterials,
@@ -31,11 +41,13 @@ export default function AppProvider({ children }) {
   );
   const [toast, setToast] = useState(null);
   const timer = useRef(null);
+  /** Muestra un aviso durante 4.5 segundos y cancela el temporizador del anterior. */
   const notify = (message, type = "success") => {
     clearTimeout(timer.current);
     setToast({ message, type });
     timer.current = setTimeout(() => setToast(null), 4500);
   };
+  // Traduce errores de almacenamiento en un aviso y libera recursos al desmontar.
   useEffect(() => {
     const handleError = () =>
       setToast({
@@ -49,6 +61,7 @@ export default function AppProvider({ children }) {
       window.removeEventListener("printsmart:storage-error", handleError);
     };
   }, []);
+  /** Añade un evento al inicio y conserva como máximo las 40 entradas más recientes. */
   const logActivity = (
     title,
     description,
@@ -69,6 +82,7 @@ export default function AppProvider({ children }) {
       ].slice(0, 40),
     );
   };
+  /** Formatea símbolo y decimales según las preferencias, sin convertir divisas. */
   const money = (value, digits = 2) =>
     `${settings.symbol} ${new Intl.NumberFormat(settings.language, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value)}`;
   return (

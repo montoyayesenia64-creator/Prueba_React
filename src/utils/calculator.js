@@ -1,11 +1,24 @@
-/** STL en milímetros: volumen por tetraedros con signo, ASCII o binario. */
+/**
+ * @file Funciones de geometría y costos sin dependencias de React ni del DOM.
+ * Sus resultados alimentan Calculator.jsx y se verifican con business.test.js.
+ */
+/**
+ * Lee una malla STL ASCII o binaria y suma volúmenes de tetraedros con signo.
+ * Se asumen coordenadas en milímetros y una malla cerrada con caras orientadas
+ * consistentemente. Las comprobaciones básicas no certifican su integridad.
+ * @param {ArrayBuffer} buffer Contenido completo del archivo seleccionado.
+ * @returns {{volumeCm3: number, triangles: number}} Volumen en cm³ y caras leídas.
+ * @throws {Error} Si el formato, las coordenadas o el volumen no son válidos.
+ */
 export function parseSTL(buffer) {
   if (buffer.byteLength < 15)
     throw new Error("El archivo STL está vacío o incompleto.");
   const view = new DataView(buffer);
+  // STL binario: cabecera de 80 bytes, contador uint32 y 50 bytes por triángulo.
   const triangles = buffer.byteLength >= 84 ? view.getUint32(80, true) : 0;
   let volume = 0;
   let count = 0;
+  // El producto triple a·(b×c)/6 aporta el volumen firmado de cada cara.
   const addTriangle = (a, b, c) => {
     if (![...a, ...b, ...c].every(Number.isFinite))
       throw new Error("El STL contiene coordenadas inválidas.");
@@ -18,6 +31,7 @@ export function parseSTL(buffer) {
   };
   if (triangles > 0 && 84 + triangles * 50 === buffer.byteLength) {
     for (let i = 0; i < triangles; i++) {
+      // Omite los 12 bytes de la normal; cada vértice ocupa tres float32.
       const offset = 84 + i * 50 + 12;
       const vertex = (n) =>
         [0, 4, 8].map((axis) => view.getFloat32(offset + n * 12 + axis, true));
@@ -27,6 +41,7 @@ export function parseSTL(buffer) {
     const source = new TextDecoder().decode(buffer);
     if (!/^\s*solid\b/i.test(source) || !/endsolid/i.test(source))
       throw new Error("El archivo no contiene un STL ASCII o binario válido.");
+    // En ASCII se agrupan de tres en tres los vértices declarados en el texto.
     const vertices = [
       ...source.matchAll(
         /vertex\s+([-+\d.eE]+)\s+([-+\d.eE]+)\s+([-+\d.eE]+)/g,
@@ -37,6 +52,7 @@ export function parseSTL(buffer) {
     for (let i = 0; i < vertices.length; i += 3)
       addTriangle(vertices[i], vertices[i + 1], vertices[i + 2]);
   }
+  // 1 cm³ = 1000 mm³; el valor absoluto elimina el signo de orientación global.
   const volumeCm3 = Math.abs(volume) / 1000;
   if (!count || !Number.isFinite(volumeCm3) || volumeCm3 <= 0)
     throw new Error(
@@ -44,6 +60,20 @@ export function parseSTL(buffer) {
     );
   return { volumeCm3, triangles: count };
 }
+/**
+ * Estima costos con las tarifas de la cotización de referencia.
+ * Una capa mayor reduce las horas estimadas. El porcentaje es recargo sobre
+ * costo, no margen sobre ventas; no incluye impuestos, soportes ni transporte.
+ * La interfaz debe validar rangos y finitud antes de generar pedidos o PDF.
+ * @param {object} options Parámetros técnicos y económicos.
+ * @param {number} [options.grams=124.5] Peso estimado en gramos.
+ * @param {number} [options.price=420] Precio por kilogramo, en la moneda elegida.
+ * @param {number} [options.layer=0.1] Altura de capa positiva en milímetros.
+ * @param {number} [options.laborHours=2.5] Horas de trabajo posterior a impresión.
+ * @param {number} [options.margin=25] Recargo porcentual aplicado al subtotal.
+ * @returns {{grams: number, printHours: number, material: number, machine: number,
+ * electricity: number, labor: number, subtotal: number, markup: number, total: number}}
+ */
 export function calculateQuote({
   grams = 124.5,
   price = 420,
@@ -51,6 +81,7 @@ export function calculateQuote({
   laborHours = 2.5,
   margin = 25,
 }) {
+  // Referencia: 124.5 g, capa 0.1 mm y duración de 14 h 22 min.
   const printHours = (grams / 124.5) * (14 + 22 / 60) * (0.1 / layer);
   const material = (grams / 1000) * price;
   const machine = printHours * (18.5 / (14 + 22 / 60));

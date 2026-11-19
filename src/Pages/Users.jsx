@@ -1,3 +1,8 @@
+/**
+ * @file Gestión local de usuarios: alta, edición, roles, estado y búsqueda.
+ * Las preferencias de 2FA/IP solo se guardan como demostración; no aplican
+ * autenticación, restricciones de red ni autorización sobre las pantallas.
+ */
 import { useState } from "react";
 import { useAppData } from "../context/AppContext";
 import {
@@ -10,14 +15,21 @@ import {
   Switch,
   EmptyState,
 } from "../components/UI";
+/** Valores que se recuperan cada vez que se abre el formulario de alta. */
 const blank = { name: "", email: "", role: "Operador", status: "Ausente" };
+/**
+ * @param {{search: string}} props Búsqueda recibida desde la barra superior.
+ * El formulario se reutiliza: editing=null crea un registro; un ID edita ese usuario.
+ */
 export default function Users({ search }) {
   const { users, setUsers, settings, setSettings, notify, logActivity } =
     useAppData();
+  // Los usuarios viven en el contexto; pestaña, borrador y diálogo son estado local.
   const [tab, setTab] = useState("Todos");
   const [form, setForm] = useState(blank);
   const [editing, setEditing] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  // La búsqueda y la pestaña se combinan; no modifican la colección original.
   const filtered = users.filter(
     (item) =>
       `${item.name} ${item.email} ${item.role}`
@@ -26,11 +38,14 @@ export default function Users({ search }) {
       (tab === "Todos" ||
         item.role === (tab === "Operadores" ? "Operador" : "Cliente")),
   );
+  /** Valida, normaliza el correo y guarda un alta o reemplaza el registro editado. */
   const submit = (event) => {
     event.preventDefault();
+    // required no rechaza una cadena de espacios: trim comprueba el nombre real.
     if (!form.name.trim())
       return notify("Escribe el nombre del usuario.", "warning");
     const email = form.email.trim().toLowerCase();
+    // Al editar se excluye el propio ID para no detectar su correo como duplicado.
     if (
       users.some(
         (item) => item.id !== editing && item.email.toLowerCase() === email,
@@ -60,10 +75,13 @@ export default function Users({ search }) {
     notify(editing ? "Usuario actualizado." : "Usuario registrado.");
     setModalOpen(false);
   };
+  /** Guarda el booleano del interruptor y comunica el alcance de demostración. */
   const security = (key, value) => {
     setSettings({ ...settings, [key]: value });
     notify("Preferencia de seguridad guardada para esta demostración.");
   };
+  // Los indicadores suman una base histórica de ejemplo; la tabla muestra los
+  // registros locales. El formulario protege rol/estado del administrador USR-001.
   return (
     <>
       <PageHeader title="Gestión de Usuarios">

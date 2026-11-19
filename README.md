@@ -72,7 +72,9 @@ Las descargas funcionan sin servidor:
 
 ## Código y verificación
 
-Consulta [la arquitectura y reglas de negocio](docs/ARQUITECTURA.md) y [el registro de verificación y su reproducción](docs/VERIFICACION.md).
+Consulta [la guía del código por archivo](docs/CODIGO.md), [la arquitectura y reglas de negocio](docs/ARQUITECTURA.md) y [el registro de verificación y su reproducción](docs/VERIFICACION.md).
+
+Los archivos de código incluyen comentarios en español y documentación JSDoc sobre componentes, parámetros, validaciones, unidades de cálculo y efectos de almacenamiento. Las hojas CSS están organizadas con comentarios por bloques; los manifiestos JSON se explican en la guía para conservar su formato válido.
 
 Los estilos de las capturas están centralizados en `src/Pages/Administrador/Administrador.css`. Los colores, el ancho del menú y la altura de la barra superior se ajustan mediante variables CSS al principio del archivo. Las páginas se apilan en pantallas pequeñas y las tablas tienen desplazamiento propio; no expanden el ancho de la página.
 

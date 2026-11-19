@@ -1,3 +1,7 @@
+/**
+ * @file Gestión de pedidos y avance por revisión técnica, finanzas y producción.
+ * Los pedidos se crean en NewJobForm; aquí se seleccionan, aprueban o rechazan.
+ */
 import { useState } from "react";
 import { useAppData } from "../context/AppContext";
 import {
@@ -10,6 +14,7 @@ import {
   EmptyState,
 } from "../components/UI";
 import { exportCSV } from "../utils/export";
+/** Relación entre estados del pedido y colores de sus etiquetas. */
 const tones = {
   "Pendiente técnico": "purple",
   "Pendiente finanzas": "yellow",
@@ -17,11 +22,13 @@ const tones = {
   Completado: "green",
   Rechazado: "red",
 };
+/** Cada estado editable define [texto de la acción, siguiente estado permitido por la UI]. */
 const nextStatus = {
   "Pendiente técnico": ["Aprobar revisión técnica", "Pendiente finanzas"],
   "Pendiente finanzas": ["Aprobar e iniciar impresión", "En producción"],
   "En producción": ["Completar trabajo", "Completado"],
 };
+/** @param {{search: string}} props Búsqueda por ID, cliente, contacto o modelo. */
 export default function Orders({ search }) {
   const {
     orders,
@@ -36,6 +43,7 @@ export default function Orders({ search }) {
   const [status, setStatus] = useState("Todos");
   const [filterOpen, setFilterOpen] = useState(false);
   const [confirmReject, setConfirmReject] = useState(false);
+  // El detalle se deriva del ID para reflejar los cambios de estado del contexto.
   const selected = orders.find((item) => item.id === selectedId);
   const filtered = orders.filter(
     (item) =>
@@ -51,6 +59,13 @@ export default function Orders({ search }) {
     ? orders.reduce((sum, item) => sum + item.margin, 0) / orders.length
     : 0;
   const queue = orders.filter((item) => item.status === "En producción").length;
+  /**
+   * Actualiza el pedido seleccionado y registra el evento.
+   * Al iniciar producción valida el material y descuenta el consumo estimado.
+   * El flujo de UI evita repetir el inicio; no es una transacción de base de datos.
+   * En una integración real, el servidor debe validar la transición y el stock juntos.
+   * @param {string} newStatus Siguiente estado o Rechazado tras la confirmación.
+   */
   const advance = (newStatus) => {
     if (newStatus === "En producción") {
       const material = materials.find(
@@ -91,6 +106,7 @@ export default function Orders({ search }) {
     notify(`Pedido ${selected.id}: ${newStatus.toLowerCase()}.`);
     setConfirmReject(false);
   };
+  /** Descarga los pedidos que coinciden tanto con el estado como con la búsqueda. */
   const csv = () => {
     exportCSV(
       "pedidos-printsmart",
@@ -107,6 +123,8 @@ export default function Orders({ search }) {
     );
     notify("Pedidos filtrados exportados.");
   };
+  // La duración se suma para la cola activa; sin producción se muestra el ejemplo
+  // 12h 45m. Las acciones finales no se ofrecen a pedidos completados o rechazados.
   return (
     <>
       <PageHeader

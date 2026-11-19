@@ -1,6 +1,11 @@
+/**
+ * @file Preferencias monetarias/regionales, mantenimiento y almacenamiento de ejemplo.
+ * Los formularios mantienen borradores; solo Guardar aplica esos cambios al contexto.
+ */
 import { useState } from "react";
 import { useAppData } from "../context/AppContext";
 import { PageHeader, Button, Icon, Switch, EmptyState } from "../components/UI";
+/** @param {{search: string}} props Búsqueda que muestra u oculta tarjetas de ajustes. */
 export default function Settings({ search }) {
   const { settings, setSettings, notify, logActivity } = useAppData();
   const [currency, setCurrency] = useState(settings.currency);
@@ -8,18 +13,26 @@ export default function Settings({ search }) {
   const [language, setLanguage] = useState(settings.language);
   const [timezone, setTimezone] = useState(settings.timezone);
   const [optimizing, setOptimizing] = useState(false);
+  /** Compara la consulta con las palabras clave de cada tarjeta. */
   const matches = (text) => text.toLowerCase().includes(search.toLowerCase());
+  /** Guarda denominación y símbolo sin aplicar un tipo de cambio a los importes. */
   const saveCurrency = (event) => {
     event.preventDefault();
     if (!symbol.trim()) return;
     setSettings({ ...settings, currency, symbol: symbol.trim() });
     notify("Moneda y símbolo guardados.");
   };
+  /** Cambia los formatos de números/fechas; no traduce los textos de la interfaz. */
   const saveRegion = (event) => {
     event.preventDefault();
     setSettings({ ...settings, language, timezone });
     notify("Preferencias regionales guardadas.");
   };
+  /**
+   * Revisa CacheStorage y elimina únicamente cachés con prefijo printsmart-temp-.
+   * No borra localStorage ni opera sobre un servidor; optimized cambia el medidor
+   * ilustrativo de GB. Se notifica éxito incluso cuando no había cachés de ese tipo.
+   */
   const optimize = async () => {
     setOptimizing(true);
     try {
@@ -43,6 +56,7 @@ export default function Settings({ search }) {
       setOptimizing(false);
     }
   };
+  // Palabras clave para el filtro superior; cada índice corresponde a una tarjeta.
   const sections = [
     "moneda sistema símbolo costos facturación",
     "modo mantenimiento estado",

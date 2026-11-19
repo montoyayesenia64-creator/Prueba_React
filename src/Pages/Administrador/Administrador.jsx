@@ -1,3 +1,8 @@
+/**
+ * @file Layout del panel: barra lateral/superior, rutas y diálogos de alcance global.
+ * Coordina la sesión de demostración y la vista previa de mantenimiento.
+ * No verifica credenciales ni aplica permisos reales de administrador.
+ */
 import { useState } from "react";
 import {
   Navigate,
@@ -21,6 +26,7 @@ import Users from "../Users";
 import Settings from "../Settings";
 import "./Administrador.css";
 
+/** Lee el cierre explícito de esta pestaña; por defecto la demostración abre iniciada. */
 function readSession() {
   try {
     return sessionStorage.getItem("printsmart.signedout") !== "true";
@@ -29,27 +35,33 @@ function readSession() {
   }
 }
 
+/** Contenedor que distribuye búsqueda, preferencias y eventos a las siete páginas. */
 export default function Administrador() {
   const { activity, users, settings, notify } = useAppData();
   const location = useLocation();
   const navigate = useNavigate();
   const section = location.pathname.split("/")[1] || "dashboard";
+  // Cada sección conserva su consulta al navegar; estas búsquedas no se persisten.
   const [searches, setSearches] = useState({});
   const search = searches[section] || "";
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  // Una única clave (newJob, help, history, etc.) selecciona el diálogo global abierto.
   const [modal, setModal] = useState(null);
   const [signedIn, setSignedIn] = useState(readSession);
+  // Solo sirve para visualizar mantenimiento como visitante, no como rol autenticado.
   const [previewRole, setPreviewRole] = useState("Admin");
   const user = users.find((item) => item.id === "USR-001") || {
     name: "Camilo Zambrano",
     email: "camilo@printsmart3d.com",
     role: "Admin",
   };
+  /** Navega desde un diálogo y lo cierra para dejar visible la pantalla de destino. */
   const openSection = (path) => {
     navigate(path);
     setModal(null);
   };
+  /** Restaura la demostración como administrador y vuelve al dashboard. */
   const signIn = () => {
     try {
       sessionStorage.removeItem("printsmart.signedout");
@@ -60,6 +72,7 @@ export default function Administrador() {
     setPreviewRole("Admin");
     navigate("/dashboard");
   };
+  /** Cierra solo la sesión de esta pestaña; los registros de localStorage se conservan. */
   const signOut = () => {
     try {
       sessionStorage.setItem("printsmart.signedout", "true");
@@ -69,6 +82,7 @@ export default function Administrador() {
     setSignedIn(false);
     setModal(null);
   };
+  // Estas vistas sustituyen al panel completo antes de renderizar menú y rutas.
   if (!signedIn)
     return (
       <div className="session-screen">
@@ -109,6 +123,8 @@ export default function Administrador() {
         </section>
       </div>
     );
+  // El panel normal monta las páginas según la URL y los diálogos según modal.
+  // Las rutas desconocidas redirigen a /dashboard mediante Navigate.
   return (
     <div
       className={`admin-layout ${collapsed ? "menu-collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}

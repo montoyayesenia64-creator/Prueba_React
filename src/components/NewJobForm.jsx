@@ -1,7 +1,16 @@
+/** @file Formulario reutilizado por el menú global y por la calculadora de costos. */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppData } from "../context/AppContext";
 import { Button } from "./UI";
+/**
+ * Crea un pedido pendiente de revisión técnica y navega a su pantalla de gestión.
+ * Los valores de quote solo precargan el formulario al montarlo.
+ * @param {object} props Opciones del formulario.
+ * @param {() => void} props.onClose Cierra el diálogo que contiene el formulario.
+ * @param {{model?: string, material?: string, total?: number, grams?: number,
+ * printHours?: number, margin?: number}} [props.quote] Cotización opcional de origen.
+ */
 export default function NewJobForm({ onClose, quote }) {
   const { materials, setOrders, logActivity, notify } = useAppData();
   const navigate = useNavigate();
@@ -15,8 +24,10 @@ export default function NewJobForm({ onClose, quote }) {
     hours: quote?.printHours?.toFixed(2) || "14.37",
     margin: quote?.margin ?? 25,
   });
+  // name identifica la propiedad; los inputs numéricos se mantienen como texto al editar.
   const change = (event) =>
     setForm({ ...form, [event.target.name]: event.target.value });
+  /** Valida referencias, convierte cantidades a números y registra el nuevo pedido. */
   const submit = (event) => {
     event.preventDefault();
     if (!form.client.trim() || !form.model.trim())
@@ -24,6 +35,7 @@ export default function NewJobForm({ onClose, quote }) {
     if (!materials.some((material) => material.name === form.material))
       return notify("Selecciona un material del inventario.", "warning");
     const createdAt = new Date().toISOString();
+    // El ID continúa la secuencia PP; este contador local no coordina varios clientes.
     setOrders((previous) => [
       ...previous,
       {

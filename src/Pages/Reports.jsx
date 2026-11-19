@@ -1,3 +1,7 @@
+/**
+ * @file Análisis financiero sobre la serie de demostración reportData de 2023.
+ * Búsqueda, cliente y periodo determinan los importes, el gráfico y las exportaciones.
+ */
 import { useState } from "react";
 import { useAppData } from "../context/AppContext";
 import { reportData } from "../data/initialData";
@@ -10,12 +14,14 @@ import {
 } from "../components/UI";
 import BarChart from "../components/BarChart";
 import { exportExcel, exportPDF } from "../utils/export";
+/** @param {{search: string}} props Texto que se cruza con cliente, mes y tipo de dato. */
 export default function Reports({ search }) {
   const { money, notify } = useAppData();
   const [client, setClient] = useState("Todos los Clientes");
   const [period, setPeriod] = useState("Jul–Oct");
   const [periodOpen, setPeriodOpen] = useState(false);
   const [exporting, setExporting] = useState(false);
+  // Q3 comprende julio-septiembre; Jul–Oct incluye toda la serie y Oct solo octubre.
   const filtered = reportData.filter(
     (item) =>
       (client === "Todos los Clientes" || client === item.client) &&
@@ -25,8 +31,10 @@ export default function Reports({ search }) {
         .toLowerCase()
         .includes(search.toLowerCase()),
   );
+  // Los totales se derivan del subconjunto visible, no del conjunto original.
   const total = filtered.reduce((sum, item) => sum + item.income, 0);
   const expenses = filtered.reduce((sum, item) => sum + item.expenses, 0);
+  /** Descarga el análisis filtrado; finally libera el botón incluso si falla la descarga. */
   const pdf = async () => {
     setExporting(true);
     try {
@@ -48,6 +56,8 @@ export default function Reports({ search }) {
       setExporting(false);
     }
   };
+  // Excel usa las mismas filas que el PDF. ROI, desperdicio y eficiencia conservan
+  // valores de ejemplo y no se recalculan al filtrar la serie financiera.
   return (
     <>
       <PageHeader

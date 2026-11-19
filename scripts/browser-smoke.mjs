@@ -1,45 +1,63 @@
-// QA sin dependencias adicionales: usa un Edge/Chrome con CDP y perfil aislado.
-// node scripts/browser-smoke.mjs [URL de Vite] [URL de depuración]
+/**
+ * @file Recorrido de integración con un Edge/Chrome ya abierto y perfil aislado.
+ * Uso: node scripts/browser-smoke.mjs [URL de Vite] [URL de depuración]
+ * CDP es el protocolo de depuración del navegador; se conecta mediante WebSocket.
+ * El script restablece printsmart.* en el origen de prueba y crea registros QA.
+ * Guarda capturas, descargas y result.json en .qa/, que queda fuera de Git.
+ * No debe ejecutarse sobre un perfil que contenga datos personales de PrintSmart.
+ */
 import assert from 'node:assert/strict';
 import { mkdir, readFile, readdir, unlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+// Argumentos opcionales: servidor de la aplicación y servidor CDP del navegador.
 const base = process.argv[2] || 'http://127.0.0.1:5173';
 const debug = process.argv[3] || 'http://127.0.0.1:9222';
 const output = resolve('.qa');
 await mkdir(resolve(output, 'downloads'), { recursive: true });
+// Elimina solo descargas conocidas de QA para no confundir archivos antiguos con nuevos.
 const expectedDownloads = ['pedidos-printsmart.csv', 'cotizacion-printsmart.pdf', 'analisis-printsmart.xml', 'analisis-printsmart.pdf'];
 for (const file of expectedDownloads) await unlink(resolve(output, 'downloads', file)).catch(error => { if (error.code !== 'ENOENT') throw error; });
+// Selecciona una pestaña de prueba y excluye los procesos de extensiones del navegador.
 const targets = await (await fetch(`${debug}/json/list`)).json();
 const target = targets.find(item => item.type === 'page' && !item.url.startsWith('chrome-extension:'));
 assert.ok(target, 'Falta una pestaña de prueba en el navegador');
 const ws = new WebSocket(target.webSocketDebuggerUrl);
 await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
 let id = 0;
+// Cada comando tiene un ID; pending relaciona su respuesta con la promesa que lo espera.
 const pending = new Map();
 const errors = [];
+// También recoge errores de JavaScript/consola para hacer fallar el recorrido al final.
 ws.onmessage = event => {
   const message = JSON.parse(event.data);
   if (message.id) { const entry = pending.get(message.id); if (!entry) return; pending.delete(message.id); message.error ? entry.reject(message.error) : entry.resolve(message.result); }
   if (message.method === 'Runtime.exceptionThrown') errors.push(message.params.exceptionDetails.exception?.description || message.params.exceptionDetails.text);
   if (message.method === 'Runtime.consoleAPICalled' && message.params.type === 'error') errors.push(message.params.args.map(arg => arg.value || arg.description).join(' '));
 };
+/** Envía un comando CDP y espera la respuesta que tenga su mismo identificador. */
 const cdp = (method, params = {}) => new Promise((res, rej) => { const current = ++id; pending.set(current, { resolve: res, reject: rej }); ws.send(JSON.stringify({ id: current, method, params })); });
 const pause = ms => new Promise(res => setTimeout(res, ms));
+/** Ejecuta una expresión en la pestaña; las excepciones del navegador se propagan a Node. */
 async function evaluate(expression) {
   const result = await cdp('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true });
   if (result.exceptionDetails) throw new Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text);
   return result.result.value;
 }
+/** Espera una condición de la UI, con un máximo de 50 intentos separados por 100 ms. */
 async function until(expression, message) {
   for (let i = 0; i < 50; i++) { if (await evaluate(`Boolean(${expression})`)) return; await pause(100); }
   throw new Error(`Espera agotada: ${message}`);
 }
+/** Busca un botón por su texto exacto; selectorClick permite elegir controles sin texto. */
 const click = async text => { await evaluate(`(() => { const el = [...document.querySelectorAll('button')].find(el => el.textContent.trim() === ${JSON.stringify(text)}); if (!el) throw new Error('Botón no encontrado: ' + ${JSON.stringify(text)}); el.click(); })()`); await pause(120); };
 const selectorClick = async selector => { await evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`); await pause(100); };
+/** Usa el setter nativo y emite input/change para actualizar los campos controlados de React. */
 const input = async (selector, value) => { await evaluate(`(() => { const el = document.querySelector(${JSON.stringify(selector)}); if (!el) throw new Error('Campo no encontrado'); const proto = el.tagName === 'SELECT' ? HTMLSelectElement.prototype : HTMLInputElement.prototype; Object.getOwnPropertyDescriptor(proto, 'value').set.call(el, ${JSON.stringify(String(value))}); el.dispatchEvent(new Event(el.tagName === 'SELECT' ? 'change' : 'input', { bubbles: true })); })()`); await pause(80); };
+/** Cambia de ruta y espera su título; screenshot y stored recogen evidencias de la pantalla. */
 const route = async (path, title) => { await evaluate(`location.hash = '#/${path}'`); await until(`document.querySelector('h1')?.textContent === ${JSON.stringify(title)}`, title); await pause(150); };
 const screenshot = async name => { const result = await cdp('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false }); await writeFile(resolve(output, `${name}.png`), Buffer.from(result.data, 'base64')); };
 const stored = key => evaluate(`JSON.parse(localStorage.getItem(${JSON.stringify(`printsmart.${key}.v1`)}))`);
+// Recorrido: rutas → inventario → pedidos/stock → usuarios → cotización → ajustes → móvil.
 try {
   await cdp('Runtime.enable'); await cdp('Page.enable');
   await cdp('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: resolve(output, 'downloads') });
@@ -148,6 +166,7 @@ try {
   await selectorClick('.mobile-menu'); assert.equal(await evaluate('document.querySelector(".admin-layout").classList.contains("mobile-open")'), true);
   console.log('PASS: siete pantallas móviles y apertura del menú');
   await pause(700);
+  // Confirma las descargas y la firma PDF antes de guardar un resultado satisfactorio.
   const downloads = await readdir(resolve(output, 'downloads'));
   for (const file of expectedDownloads) assert.ok(downloads.includes(file), `Descarga pendiente: ${file}`);
   assert.equal((await readFile(resolve(output, 'downloads/cotizacion-printsmart.pdf'))).subarray(0, 4).toString(), '%PDF');

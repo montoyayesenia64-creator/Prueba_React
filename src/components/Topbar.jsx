@@ -1,4 +1,6 @@
+/** @file Barra superior compartida: buscador controlado, avisos y perfil. */
 import { Icon } from "./UI";
+// Ayudas del buscador según la sección; el filtrado se realiza en cada página.
 const placeholders = {
   dashboard: "Buscar pedidos, materiales o telemetría...",
   materiales: "Buscar materiales, lotes o proveedores...",
@@ -8,6 +10,18 @@ const placeholders = {
   usuarios: "Buscar usuarios del sistema...",
   configuracion: "Buscar ajustes...",
 };
+/**
+ * Recibe el texto de búsqueda y comunica los cambios al layout administrador.
+ * @param {object} props Estado y eventos suministrados por Administrador.jsx.
+ * @param {string} props.section Identificador de la sección de la URL.
+ * @param {string} props.search Texto actual del campo de búsqueda.
+ * @param {(value: string) => void} props.onSearch Guarda el nuevo texto.
+ * @param {() => void} props.onNotifications Abre notificaciones.
+ * @param {() => void} props.onHistory Abre el historial completo.
+ * @param {() => void} props.onProfile Abre el perfil del administrador.
+ * @param {() => void} props.onMenu Alterna el panel de navegación móvil.
+ * @param {{name: string, role: string}} props.user Perfil mostrado en la barra.
+ */
 export default function Topbar({
   section,
   search,

@@ -1,3 +1,4 @@
+/** @file Gráfico de barras agrupadas compartido por el dashboard y los informes. */
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -7,7 +8,18 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+// Chart.js requiere registrar las escalas y elementos que utilizará el gráfico.
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
+/**
+ * Dibuja las series y una tabla equivalente accesible para lectores de pantalla.
+ * Los valores de cada serie deben corresponder al orden de labels.
+ * La altura depende de .chart-container; max sugiere un máximo, no recorta los datos.
+ * @param {object} props Datos y presentación del gráfico.
+ * @param {string} props.title Nombre visible y accesible del gráfico.
+ * @param {string[]} props.labels Categorías del eje horizontal.
+ * @param {{label: string, color: string, values: number[]}[]} props.series Series a comparar.
+ * @param {number} [props.max] Máximo sugerido para la escala vertical.
+ */
 export default function BarChart({ title, labels, series, max }) {
   return (
     <section className="surface chart-card">

@@ -1,4 +1,10 @@
-/* PrintSmart 3D — estilos compartidos de las siete pantallas de referencia. */
+/*
+ * PrintSmart 3D — estilos compartidos de las siete pantallas de referencia.
+ * Administrador.jsx importa esta hoja; sus clases complementan Bootstrap.
+ * Orden: variables, layout, componentes, módulos, diálogos y adaptación de pantalla.
+ * Las variables --bs-* y --bs-btn-* personalizan Bootstrap sin editar su paquete.
+ */
+/* Variables de marca y dimensiones compartidas por el menú y la barra superior. */
 :root {
   --primary: #5c1fb8;
   --primary-hover: #4b159f;
@@ -12,6 +18,7 @@
   --bs-primary-rgb: 92, 31, 184;
   --bs-link-color: #7300ff;
 }
+/* Layout general: el contenido deja espacio al menú fijado en el borde izquierdo. */
 .admin-layout {
   min-height: 100vh;
   background: var(--background);
@@ -21,6 +28,7 @@
   min-width: 0;
   transition: margin-left 0.2s;
 }
+/* Navegación lateral, logo y acciones; el estado contraído se controla desde React. */
 .sidebar {
   position: fixed;
   inset: 0 auto 0 0;
@@ -46,6 +54,7 @@
   white-space: nowrap;
   border-bottom: 1px solid var(--border);
 }
+/* Ajuste proporcional del logo real, sin deformarlo cuando se contrae el menú. */
 .sidebar-logo {
   display: block;
   width: 25px;
@@ -158,6 +167,7 @@
 .sidebar-link.logout {
   color: #ff3d55;
 }
+/* Cambiar la variable desplaza a la vez el menú y el contenido principal. */
 .menu-collapsed {
   --sidebar-width: 65px;
 }
@@ -178,6 +188,7 @@
   justify-content: center;
   width: 100%;
 }
+/* Barra superior: buscador, notificaciones y perfil. */
 .topbar {
   height: var(--topbar-height);
   background: white;
@@ -287,6 +298,7 @@
   color: var(--muted);
   letter-spacing: 0.4px;
 }
+/* Encabezados y acciones de página; compact se usa cuando no hay subtítulo. */
 .contenido-principal {
   padding: 25px 26px 15px;
   outline: none;
@@ -323,6 +335,7 @@
   flex-wrap: wrap;
   gap: 8px;
 }
+/* Variantes de botones Bootstrap: tamaño compacto y colores de la referencia. */
 .btn {
   min-height: 36px;
   padding: 8px 15px;
@@ -368,6 +381,7 @@
   padding: 3px 10px;
   font-size: 11px;
 }
+/* Tarjetas y superficies de uso compartido en todos los módulos. */
 .surface {
   background: #fff;
   border: 1px solid var(--border);
@@ -395,6 +409,7 @@
   align-items: center;
   gap: 14px;
 }
+/* Cuadrículas de indicadores: cuatro columnas; la variante three se usa en Usuarios. */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -442,6 +457,7 @@
   font-size: 14px;
   border-radius: 7px;
 }
+/* Paleta semántica para iconos, etiquetas y variaciones; el texto también indica el estado. */
 .purple {
   background: #f5f1ff;
   color: #7200ff;
@@ -519,6 +535,7 @@
 .stat-compact .eyebrow {
   margin-bottom: 5px;
 }
+/* Distribución de gráficos y actividad. El canvas toma la altura de chart-container. */
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 2.04fr) minmax(0, 1fr);
@@ -601,6 +618,7 @@
   font-size: 14px;
   line-height: 22px;
 }
+/* Inventario: tabla y formulario; las tablas anchas se desplazan dentro de su contenedor. */
 .materials-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr);
@@ -627,6 +645,7 @@
   border-radius: 50%;
   flex-shrink: 0;
 }
+/* Tablas comunes: encabezados secundarios, separación de filas y metadatos. */
 .app-table {
   --bs-table-bg: transparent;
   --bs-table-color: #102039;
@@ -741,6 +760,7 @@
   height: 25px;
   background: #8e53fc;
 }
+/* Formularios controlados por React, controles Bootstrap y selector de color. */
 .form-stack {
   display: flex;
   flex-direction: column;
@@ -796,6 +816,7 @@ label {
   font-size: 10px;
   color: var(--muted);
 }
+/* Pedidos: indicadores compactos, fila seleccionada y panel de detalle. */
 .orders-stats {
   align-items: start;
 }
@@ -879,6 +900,7 @@ label {
   font-size: 12px;
   text-align: right;
 }
+/* Cotizador: carga STL, parámetros técnicos y desglose de precios. */
 .calculator-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.42fr) minmax(0, 1fr);
@@ -892,6 +914,7 @@ label {
   padding: 9px;
   border-radius: 25px;
 }
+/* dragging corresponde al estado de arrastre que gestiona Calculator.jsx. */
 .drop-zone {
   margin-top: 8px;
   border: 1px dashed #cbd2e0;
@@ -1018,6 +1041,7 @@ fieldset legend {
   font-size: 14px;
   font-weight: 600;
 }
+/* Destaca el importe calculado; el valor monetario procede del estado, no del CSS. */
 .quote-total {
   padding: 15px;
   text-align: center;
@@ -1067,6 +1091,7 @@ fieldset legend {
   color: var(--muted);
   margin-top: 4px;
 }
+/* Informes: selector de cliente y barras de retorno por impresora. */
 .client-select {
   width: 145px;
   height: 34px;
@@ -1112,6 +1137,7 @@ fieldset legend {
 .progress-bar.green {
   background: #16c75b;
 }
+/* Usuarios: pestañas, identidad, estados de red y resumen de permisos de ejemplo. */
 .users-card {
   padding: 15px 18px 0;
 }
@@ -1180,6 +1206,7 @@ fieldset legend {
 .security-card h2 {
   margin-bottom: 20px;
 }
+/* El input sigue siendo nativo y accesible; SVG internos representan sus dos posiciones. */
 .switch-row {
   display: flex;
   align-items: center;
@@ -1237,6 +1264,7 @@ fieldset legend {
 .role-summary .status-dot {
   margin-right: 4px;
 }
+/* Configuración: tarjetas monetarias/regionales y medidores de almacenamiento ilustrativos. */
 .settings-top-grid {
   display: grid;
   grid-template-columns: minmax(0, 2.04fr) minmax(0, 1fr);
@@ -1304,6 +1332,7 @@ fieldset legend {
   color: #cbd0dc;
   padding: 0 5px;
 }
+/* Diálogo nativo: ::backdrop solo aparece cuando showModal() lo coloca en primer plano. */
 .app-dialog {
   width: min(490px, calc(100vw - 30px));
   max-height: calc(100dvh - 50px);
@@ -1351,6 +1380,7 @@ fieldset legend {
   flex-direction: column;
   gap: 10px;
 }
+/* Aviso temporal compartido, posicionado sobre el contenido sin modificar su tamaño. */
 .app-toast {
   position: fixed;
   right: 22px;
@@ -1414,6 +1444,7 @@ fieldset legend {
 .profile-modal h3 {
   font-size: 20px;
 }
+/* Pantallas que sustituyen al panel al cerrar sesión o previsualizar mantenimiento. */
 .session-screen {
   min-height: 100dvh;
   display: grid;
@@ -1459,6 +1490,7 @@ fieldset legend {
   font-size: 12px;
   white-space: nowrap;
 }
+/* Acceso rápido para teclado; se muestra al recibir foco. */
 .skip-link {
   position: fixed;
   top: -70px;
@@ -1477,6 +1509,7 @@ fieldset legend {
 .mobile-overlay {
   display: none;
 }
+/* Escritorios amplios: limita la longitud del contenido y aumenta el área de los gráficos. */
 @media (min-width: 1500px) {
   .contenido-principal {
     max-width: 1600px;
@@ -1487,6 +1520,7 @@ fieldset legend {
     height: 300px;
   }
 }
+/* Escritorios medianos: reduce espaciados sin alterar la navegación lateral. */
 @media (max-width: 1200px) {
   .page-heading {
     align-items: flex-start;
@@ -1526,6 +1560,7 @@ fieldset legend {
     font-size: 11px;
   }
 }
+/* Tabletas: apila paneles y distribuye indicadores en dos columnas. */
 @media (max-width: 1000px) {
   :root {
     --sidebar-width: 172px;
@@ -1580,6 +1615,7 @@ fieldset legend {
     min-height: auto;
   }
 }
+/* Móviles: menú superpuesto, sin margen lateral reservado y formularios apilados. */
 @media (max-width: 640px) {
   :root {
     --sidebar-width: 182px;
@@ -1737,6 +1773,7 @@ fieldset legend {
     margin-left: 23px;
   }
 }
+/* Respeta la preferencia del sistema para reducir movimiento y transiciones. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

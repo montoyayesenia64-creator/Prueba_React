@@ -1,3 +1,7 @@
+/**
+ * @file Inventario: registro, edición, filtros, alertas y exportación de materiales.
+ * El precio y el punto de re-pedido usan la unidad del registro, kg o L.
+ */
 import { useState } from "react";
 import { useAppData } from "../context/AppContext";
 import {
@@ -9,6 +13,7 @@ import {
   EmptyState,
 } from "../components/UI";
 import { exportCSV } from "../utils/export";
+/** Borrador inicial; los campos numéricos se convierten al guardar. */
 const blank = {
   name: "",
   type: "PLA",
@@ -20,21 +25,25 @@ const blank = {
   expiry: "",
   unit: "kg",
 };
+/** Clasifica existencias y devuelve [texto visible, clase de color]. */
 const materialStatus = (item) =>
   item.stock < item.reorder
     ? ["Crítico", "red"]
     : item.stock <= item.reorder * 2
       ? ["Suficiente", "yellow"]
       : ["Óptimo", "green"];
+/** @param {{search: string}} props Texto de búsqueda del inventario y proveedores. */
 export default function Materials({ search }) {
   const { materials, setMaterials, setOrders, money, notify, logActivity } =
     useAppData();
   const [form, setForm] = useState(blank);
+  // editing conserva el ID; selected guarda el material del diálogo de detalle.
   const [editing, setEditing] = useState(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [typeFilter, setTypeFilter] = useState("Todos");
   const [selected, setSelected] = useState(null);
+  // Esta misma colección alimenta la tabla y el CSV, respetando todos los filtros.
   const filtered = materials.filter(
     (item) =>
       `${item.name} ${item.id} ${item.supplier} ${item.type}`
@@ -48,13 +57,16 @@ export default function Materials({ search }) {
     0,
   );
   const critical = materials.filter((item) => item.stock < item.reorder).length;
+  // Una fecha vencida también cumple remaining <= 30 y se cuenta como alerta.
   const expiring = materials.filter((item) => {
     const remaining =
       (new Date(`${item.expiry}T23:59:59`) - new Date()) / 86400000;
     return item.expiry && remaining <= 30;
   }).length;
+  /** Actualiza únicamente el campo identificado por el atributo name del input. */
   const change = (event) =>
     setForm({ ...form, [event.target.name]: event.target.value });
+  /** Valida nombres únicos, convierte cantidades y guarda el alta o la edición. */
   const submit = (event) => {
     event.preventDefault();
     if (!form.name.trim() || !form.supplier.trim())
@@ -111,6 +123,7 @@ export default function Materials({ search }) {
     setForm(blank);
     setEditing(null);
   };
+  /** Copia el registro al formulario, cierra su detalle y desplaza hasta la edición. */
   const edit = (item) => {
     setForm(item);
     setEditing(item.id);
@@ -119,6 +132,7 @@ export default function Materials({ search }) {
       .getElementById("material-form")
       ?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
+  /** Exporta las filas visibles con estado calculado y fecha de caducidad. */
   const exportData = () => {
     exportCSV(
       "inventario-printsmart",

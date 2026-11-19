@@ -1,4 +1,17 @@
-// Datos de demostración. Los cambios se conservan en localStorage, versión 1.
+/**
+ * @file Semillas utilizadas cuando localStorage no contiene datos recuperables.
+ * AppProvider las toma como estado inicial; los formularios crean nuevas colecciones
+ * en lugar de modificar estas constantes. Ningún registro procede de un servicio real.
+ *
+ * Esquemas principales:
+ * - Material: id, name, detail, supplier, type, color hexadecimal, stock, reorder,
+ *   price por unidad, unit (kg/L) y expiry en formato YYYY-MM-DD.
+ * - Pedido: id PP, client/contact, model, margin (recargo), status, amount,
+ *   material por nombre, weight en gramos, hours y createdAt ISO.
+ * - Usuario: id, name, email, role, status, activity y color del avatar.
+ * - Actividad: id, title, description, time (texto), icon y tone.
+ */
+/** Materiales iniciales; stock y re-pedido comparten la unidad de cada registro. */
 export const initialMaterials = [
   {
     id: "MAT-001",
@@ -79,6 +92,7 @@ export const initialMaterials = [
     expiry: "2026-12-15",
   },
 ];
+/** Pedidos de ejemplo enlazados con materiales por nombre; comienzan pendientes. */
 export const initialOrders = [
   {
     id: "PP-9382",
@@ -120,6 +134,7 @@ export const initialOrders = [
     createdAt: "2026-11-17T11:00:00-05:00",
   },
 ];
+/** Perfiles de ejemplo; USR-001 identifica al administrador principal protegido en la UI. */
 export const initialUsers = [
   {
     id: "USR-001",
@@ -158,6 +173,7 @@ export const initialUsers = [
     color: "#ff4149",
   },
 ];
+/** Eventos históricos ilustrativos; sus textos de tiempo no se recalculan con un reloj. */
 export const initialActivity = [
   {
     id: "ACT-001",
@@ -192,6 +208,10 @@ export const initialActivity = [
     tone: "yellow",
   },
 ];
+/**
+ * Preferencias por defecto. language configura Intl; currency/symbol no convierten
+ * precios. maintenance permite vista previa; 2FA/IP y capacidad son de demostración.
+ */
 export const initialSettings = {
   currency: "COP",
   symbol: "$",
@@ -202,6 +222,7 @@ export const initialSettings = {
   ipWhitelist: false,
   optimized: false,
 };
+/** Serie financiera fija de 2023; Reports filtra y agrega estas filas en memoria. */
 export const reportData = [
   {
     month: "Jul",

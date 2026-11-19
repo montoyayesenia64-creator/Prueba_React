@@ -1,3 +1,7 @@
+/**
+ * @file Cotizador: carga STL, parámetros de impresión, desglose y generación de pedido.
+ * Mantiene el archivo analizado en memoria; no lo sube ni conserva al abandonar la página.
+ */
 import { useRef, useState } from "react";
 import { useAppData } from "../context/AppContext";
 import {
@@ -12,6 +16,7 @@ import { calculateQuote, parseSTL } from "../utils/calculator";
 import { exportPDF } from "../utils/export";
 import NewJobForm from "../components/NewJobForm";
 
+/** @param {{search: string}} props Búsqueda aplicada a materiales y al modelo de biblioteca. */
 export default function Calculator({ search }) {
   const { materials, money, notify, logActivity, settings } = useAppData();
   const [materialId, setMaterialId] = useState(
@@ -31,17 +36,22 @@ export default function Calculator({ search }) {
   const [dragging, setDragging] = useState(false);
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [newJob, setNewJob] = useState(false);
+  // input abre/limpia el selector nativo; loadId distingue lecturas consecutivas.
   const input = useRef(null);
   const loadId = useRef(0);
   const material =
     materials.find((item) => item.id === materialId) || materials[0];
+  // Densidades aproximadas en g/cm³, usadas para convertir volumen en peso.
   const density =
     { PLA: 1.24, PETG: 1.27, ABS: 1.04, Resina: 1.1, Onyx: 1.2, Nylon: 1.14 }[
       material?.type
     ] || 1.24;
+  // Se reserva un 15% para paredes y se aplica relleno al 85% interior.
+  // Sin STL, 0.5325 y 1.2 calibran la referencia de 124.5 g al 45% con Onyx.
   const grams = file
     ? file.volumeCm3 * density * (0.15 + (0.85 * infill) / 100)
     : (((124.5 * (0.15 + (0.85 * infill) / 100)) / 0.5325) * density) / 1.2;
+  // Un precio por litro se convierte a su equivalente por kg usando la densidad.
   const quote = calculateQuote({
     grams,
     price:
@@ -50,6 +60,7 @@ export default function Calculator({ search }) {
     laborHours: Number(laborHours),
     margin: Number(margin),
   });
+  // Además de las restricciones HTML, impide descargar o crear con entradas inválidas.
   const valid =
     !!material &&
     !loading &&
@@ -61,6 +72,12 @@ export default function Calculator({ search }) {
     Number(laborHours) <= 1000 &&
     Number(margin) >= 0 &&
     Number(margin) <= 100;
+  /**
+   * Valida extensión/tamaño, lee el archivo y analiza su volumen sin enviarlo a una API.
+   * loadId impide que una lectura anterior sobrescriba una selección más reciente;
+   * no cancela la lectura física. El análisis geométrico se ejecuta en el hilo principal.
+   * @param {File | undefined} selected Primer archivo del selector o del arrastre.
+   */
   const readFile = async (selected) => {
     if (!selected) return;
     const currentLoad = ++loadId.current;
@@ -93,6 +110,7 @@ export default function Calculator({ search }) {
       if (input.current) input.current.value = "";
     }
   };
+  /** Exporta la cotización válida e incorpora un evento al historial compartido. */
   const pdf = async () => {
     if (!valid) return;
     setExporting(true);
