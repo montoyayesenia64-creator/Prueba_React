@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import { Auth } from "../../js/auth.js"; 
+import { Auth } from "../../js/auth.js";
 
 import "./css/Cliente.css";
 import "./css/sidebar_toggle.css";
@@ -335,15 +335,23 @@ export default function ClientePortal() {
     if (!sesion || sesion.rol !== "Cliente") Auth.cerrarSesion();
   }, [sesion]);
 
-  // Clases del <body> (cliente-body + sidebar oculto guardado)
+  // Sidebar oculto/visible (persistido en localStorage)
+  const [sidebarOculto, setSidebarOculto] = useState(
+    () => localStorage.getItem("ps3d_sidebar_oculto") === "1",
+  );
+
+  // Clase cliente-body en el <body>
   useEffect(() => {
     document.body.classList.add("cliente-body");
-    document.body.classList.toggle(
-      "sidebar-oculto",
-      localStorage.getItem("ps3d_sidebar_oculto") === "1",
-    );
     return () => document.body.classList.remove("cliente-body");
   }, []);
+
+  // Aplicar/guardar el estado del sidebar
+  useEffect(() => {
+    document.body.classList.toggle("sidebar-oculto", sidebarOculto);
+    localStorage.setItem("ps3d_sidebar_oculto", sidebarOculto ? "1" : "0");
+    return () => document.body.classList.remove("sidebar-oculto");
+  }, [sidebarOculto]);
 
   // Cerrar notificaciones con clic fuera / ESC
   useEffect(() => {
@@ -451,6 +459,19 @@ export default function ClientePortal() {
           </button>
         </div>
       </aside>
+
+      {/* BOTÓN MOSTRAR / OCULTAR SIDEBAR (fuera del aside para que no se oculte con él) */}
+      <button
+        type="button"
+        className="btn-toggle-sidebar"
+        onClick={() => setSidebarOculto((v) => !v)}
+        aria-label={sidebarOculto ? "Mostrar menú" : "Ocultar menú"}
+        aria-expanded={!sidebarOculto}
+        title={sidebarOculto ? "Mostrar menú" : "Ocultar menú"}
+        style={{ left: sidebarOculto ? 20 : "var(--sidebar-w, 260px)" }}
+      >
+        <i className={`bi ${sidebarOculto ? "bi-chevron-right" : "bi-chevron-left"}`}></i>
+      </button>
 
       {/* TOPBAR */}
       <header className="cl-topbar">
