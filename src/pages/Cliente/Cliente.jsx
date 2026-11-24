@@ -1,11 +1,11 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { Auth } from "../../js/auth.js";
-
 import "./css/Cliente.css";
 import "./css/sidebar_toggle.css";
 import "./css/variables.css";
 import "./css/responsive.css";
 import "./css/carrito.css";
+
 /* ═══════════════════════════════════════════════
    HELPERS Y DATOS
 ═══════════════════════════════════════════════ */
@@ -435,7 +435,7 @@ export default function ClientePortal() {
       {/* SIDEBAR */}
       <aside className="cl-sidebar">
         <a className="cl-brand" href="index.html">
-          <img src="/assets/logo2.jpeg" alt="Logo" className="cl-brand-logo" />
+          <img src="/logo2.jpeg" alt="Logo" className="cl-brand-logo" />
           <span className="cl-brand-txt">PrintSmart 3D</span>
         </a>
 
@@ -825,7 +825,7 @@ function Catalogo({ busqueda, irA, pedirProducto, toast }) {
           <div key={p.nombre} className="cl-cat-card" data-cat={p.cat} onClick={() => pedirProducto(p)}>
             <div className="cl-cat-img">
               {p.img ? (
-                <img src={`/img/${p.img}`} alt={p.nombre} style={{ width: "100%", height: "100%" }} />
+                <img src={`/src/assets/img/${p.img}`} alt={p.nombre} style={{ width: "100%", height: "100%" }} />
               ) : (
                 <i className={`bi ${p.icono}`}></i>
               )}
