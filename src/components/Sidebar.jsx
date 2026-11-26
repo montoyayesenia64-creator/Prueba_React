@@ -1,7 +1,7 @@
 /** @file Menú lateral: marca, navegación, nuevo trabajo, ayuda y cierre de sesión. */
 import { NavLink } from "react-router-dom";
 import { Icon } from "./UI";
-// Cada entrada define [ruta, texto visible, nombre del icono de Bootstrap].
+// Cada entrada define [ruta, texto visible, nombre del icono vectorial local].
 const options = [
   ["dashboard", "Panel de Control", "grid-1x2"],
   ["materiales", "Materiales", "box-seam"],

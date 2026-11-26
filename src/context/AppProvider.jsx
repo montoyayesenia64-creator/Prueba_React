@@ -5,6 +5,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { AppContext } from "./AppContext";
+import Icon from "../components/Icon";
 import { usePersistentState } from "../hooks/usePersistentState";
 import {
   initialActivity,
@@ -105,17 +106,14 @@ export default function AppProvider({ children }) {
       {children}
       {toast && (
         <div className={`app-toast ${toast.type}`} role="status">
-          <i
-            className={`bi bi-${toast.type === "success" ? "check-circle" : "exclamation-circle"}`}
-            aria-hidden="true"
-          />
+          <Icon name={toast.type === "success" ? "check-circle" : "exclamation-circle"} />
           <span>{toast.message}</span>
           <button
             type="button"
             aria-label="Cerrar aviso"
             onClick={() => setToast(null)}
           >
-            <i className="bi bi-x-lg" />
+            <Icon name="x-lg" />
           </button>
         </div>
       )}

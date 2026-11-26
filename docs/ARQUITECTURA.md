@@ -7,7 +7,7 @@ Para recorrer cada archivo y sus funciones, consulta [la guía del código](CODI
 ```text
 src/
   App.jsx                          HashRouter y proveedor de datos
-  main.jsx                         React, Bootstrap e iconos
+  main.jsx                         React y hojas de estilo locales
   index.css                        Normalización y tipografía
   components/
     Sidebar.jsx                    Navegación y menú adaptable

@@ -1,6 +1,6 @@
 # PrintSmart 3D
 
-Panel de administración de impresión 3D construido con **React + Vite + Bootstrap 5**, siguiendo las siete capturas de referencia. Incluye navegación, formularios, inventario, pedidos, cotizaciones, gráficos y exportaciones. La aplicación y sus datos funcionan localmente en el navegador.
+Panel de administración de impresión 3D construido con **React + Vite y CSS propio**, siguiendo las siete capturas de referencia. Incluye navegación, formularios, inventario, pedidos, cotizaciones, gráficos y exportaciones. La aplicación y sus datos funcionan localmente en el navegador.
 
 ## Ejecutar el proyecto
 
@@ -19,7 +19,7 @@ npm run preview   # Servir la compilación localmente
 npm test          # Pruebas de cotización, STL y protección del CSV
 ```
 
-Las dependencias ya utilizadas por el proyecto se conservaron. Bootstrap y Bootstrap Icons se importan en `src/main.jsx`; los componentes interactivos usan estado de React y diálogos nativos, sin manejadores HTML en cadenas de texto ni manipulación de Bootstrap JS sobre el DOM de React.
+Los estilos de base están en `src/styles/native.css` y los iconos SVG locales en `src/components/Icon.jsx`. No necesitas instalar `bootstrap` ni `bootstrap-icons`. Los componentes interactivos usan estado de React y diálogos nativos; `npm run dev` arranca Vite con las dependencias habituales del proyecto.
 
 ## Pantallas y funciones
 

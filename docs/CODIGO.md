@@ -5,7 +5,7 @@ Esta guía complementa los comentarios escritos dentro de los archivos. Los bloq
 ## Por dónde empezar
 
 1. [index.html](../index.html) declara el contenedor `root` y carga el módulo de entrada.
-2. [main.jsx](../src/main.jsx) importa Bootstrap y los estilos base, y monta React.
+2. [main.jsx](../src/main.jsx) importa los estilos locales y monta React. [native.css](../src/styles/native.css) define la base de controles y utilidades; [Icon.jsx](../src/components/Icon.jsx) contiene los iconos SVG sin fuentes externas.
 3. [App.jsx](../src/App.jsx) configura las rutas con `HashRouter` y el estado con `AppProvider`.
 4. [Administrador.jsx](../src/Pages/Administrador/Administrador.jsx) organiza menú, barra superior, páginas y diálogos.
 5. Cada archivo de `Pages` recibe la búsqueda de su sección y utiliza `useAppData()` para consultar o modificar los registros compartidos.
@@ -87,7 +87,7 @@ Las utilidades de cálculo no acceden a React ni al almacenamiento. Las de expor
 | [App.css](../src/App.css)                                         | Archivo reservado del esqueleto original; no está importado actualmente por `App.jsx`.                                                                                                                                                                        |
 | [Administrador.css](../src/Pages/Administrador/Administrador.css) | Incluye comentarios por bloques: variables, layout, menú/logo, barra superior, botones, tarjetas, tablas, formularios, cada módulo, diálogos, avisos y accesibilidad. También explica las adaptaciones para escritorio, tableta, móvil y movimiento reducido. |
 
-Para cambiar un estilo, busca primero el nombre de su clase en JSX y luego su selector CSS. Las clases de Bootstrap aportan la base; esta hoja ajusta los estilos de PrintSmart sin modificar `node_modules`.
+Para cambiar un estilo, busca primero el nombre de su clase en JSX y luego su selector CSS. `src/styles/native.css` aporta la base local de controles y utilidades; esta hoja define los estilos de PrintSmart sin modificar `node_modules`.
 
 ## Configuración y archivos auxiliares
 

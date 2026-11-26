@@ -1,14 +1,12 @@
 /**
- * @file Componentes visuales reutilizables basados en clases de Bootstrap.
+ * @file Componentes visuales reutilizables con estilos locales.
  * No conocen los registros del negocio: reciben contenido, estado y callbacks.
  */
 import { useEffect, useRef } from "react";
-/** Icono decorativo de Bootstrap Icons; el control que lo contiene aporta su nombre accesible. */
-export function Icon({ name, className = "" }) {
-  return <i className={`bi bi-${name} ${className}`} aria-hidden="true" />;
-}
+import Icon from "./Icon";
+export { Icon };
 /**
- * Botón con variante Bootstrap e icono opcional.
+ * Botón con variante de color e icono opcional.
  * Por defecto type="button" evita envíos accidentales; ...props permite indicar
  * type="submit", onClick, disabled y atributos de accesibilidad cuando se necesitan.
  */

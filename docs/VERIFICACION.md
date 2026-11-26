@@ -1,5 +1,16 @@
 # Verificación de PrintSmart 3D
 
+## Retirada de Bootstrap — 26 de noviembre de 2026
+
+Se eliminaron `bootstrap` y `bootstrap-icons` de `package.json`, del lockfile y de `node_modules`. Los controles usan CSS local en `src/styles/native.css`; los 54 iconos se dibujan con SVG en `src/components/Icon.jsx`. No se cargan fuentes ni recursos de esas bibliotecas.
+
+- `npm test`: **9/9 aprobadas**. Las tres regresiones de dependencias/importaciones/iconos fallaban antes de retirar los paquetes y pasan después; se conservan las seis pruebas de negocio.
+- `npm run lint` y `npm run build`: salida correcta. El CSS compilado pasó de 336,56 KB a 30,26 KB; desaparecieron las dos fuentes de iconos.
+- `npm run dev`: arranque nuevo de Vite en **769 ms**, con ambos paquetes ya desinstalados, en `http://localhost:5173/`.
+- Edge automatizado: **14 vistas** (siete rutas a 1440 × 900 y a 390 × 900), sin desbordamiento de página; iconos SVG visibles; **cero errores de consola**. Se verificaron también diálogo/Escape, columnas y botón morado, interruptor, progreso, guardado/cierre del aviso y menú móvil a 390 × 844.
+
+Al reemplazar la base CSS se corrigió el contenedor de las tablas: `position: relative` mantiene las etiquetas accesibles dentro de su scroll. El resultado y las capturas de esta comprobación se conservan en `.qa/sin-bootstrap/`. Este recorrido verifica la retirada de dependencias y los controles afectados; el recorrido funcional anterior se describe a continuación.
+
 La historia verificada es: un administrador registra un material, crea o cotiza un trabajo, aprueba sus revisiones, inicia impresión con descuento de stock y completa el pedido; los cambios se reflejan en las pantallas y sobreviven a una recarga.
 
 ## Verificación realizada
