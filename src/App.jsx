@@ -1,27 +1,24 @@
-
-import Navbar from "./Components/Navbar/Navbar";
-import Inicio from "./Pages/Inicio/Inicio";
-import "./App.css";
-
-// Componente principal de PrintSmart 3D
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import OperarioDashboard from "./Pages/Operario/Operario.jsx";
 function App() {
-
-    return (
-
-        // Contenedor principal de la aplicación
-        <div>
-
-            {/* Barra de navegación */}
-            <Navbar />
-
-            {/* Página principal de PrintSmart 3D */}
-            <Inicio />
-
-        </div>
-
-    );
-
+  return (
+    <Router>
+      <Routes>
+        {/* Aquí defines la ruta donde se verá tu dashboard */}
+        <Route path="/operario" element={<OperarioDashboard />} />
+        
+        {/* Si quieres que sea la página principal al abrir la app: */}
+        <Route path="/" element={<OperarioDashboard />} />
+      </Routes>
+    </Router>
+  );
 }
 
-// Exportamos el componente principal
 export default App;
+
+
+
+
+
+
