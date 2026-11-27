@@ -1,0 +1,98 @@
+
+/* Barra principal de navegación */
+.navbar {
+    width: 100%;
+    background-color: #09090D;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 35px;
+    box-sizing: border-box;
+    border-bottom: 2px solid #7915D5;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Contenedor del logo y nombre de la empresa */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Imagen del logo de PrintSmart 3D */
+.imagen-logo {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+}
+
+/* Nombre de la empresa */
+.logo h2 {
+    color: white;
+    font-size: 23px;
+    margin: 0;
+}
+
+/* Color morado para el texto 3D */
+.logo span {
+    color: #B66AFF;
+}
+
+/* Organización del menú */
+.menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilos de los enlaces */
+.menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+/* Cambia el color al pasar el mouse */
+.menu a:hover {
+    color: #B66AFF;
+}
+
+/* Contenedor de los botones */
+.botones-navbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Estilos generales de los botones */
+.btn-login,
+.btn-registro {
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 7px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+/* Botón de iniciar sesión */
+.btn-login {
+    color: white;
+    border: 1px solid #A855F7;
+}
+
+/* Botón para crear una cuenta */
+.btn-registro {
+    background-color: #7915D5;
+    color: white;
+}
+
+/* Efecto al pasar el mouse por los botones */
+.btn-login:hover,
+.btn-registro:hover {
+    background-color: #B66AFF;
+    color: white;
+}
