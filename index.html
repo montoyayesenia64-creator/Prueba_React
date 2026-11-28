@@ -1,9 +1,12 @@
 <!doctype html>
+<!-- Documento base servido por Vite. React dibuja las pantallas dentro de #root. -->
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/jpeg" href="/logo2.jpeg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#5c1fb8" />
+    <meta name="description" content="PrintSmart 3D: panel de gestión de impresión, materiales, pedidos y cotizaciones." />
     <title>PrintSmart 3D</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
@@ -11,7 +14,9 @@
     />
   </head>
   <body>
+    <!-- Este contenedor debe coincidir con el ID usado en src/main.jsx. -->
     <div id="root"></div>
+    <!-- Vite transforma este módulo y sus dependencias al generar dist/. -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

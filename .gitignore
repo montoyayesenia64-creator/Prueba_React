@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Artefactos locales de verificación y perfil aislado del navegador
+.qa/

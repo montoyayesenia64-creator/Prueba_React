@@ -1,3 +1,5 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { Auth } from "../../js/auth.js";
 import "./css/Cliente.css";
@@ -420,8 +422,9 @@ export default function ClientePortal() {
   };
 
   const primerNombre = perfil.nombre.split(" ")[0];
-  const NavItem = ({ id, icono, children }) => (
+  const navItem = (id, icono, children) => (
     <button
+      key={id}
       className={`cl-nav-item ${seccion === id ? "activo" : ""}`}
       id={`nav-${id}`}
       onClick={() => irA(id)}
@@ -440,13 +443,13 @@ export default function ClientePortal() {
         </a>
 
         <nav className="cl-nav">
-          <NavItem id="dashboard" icono="bi-grid-1x2">Dashboard</NavItem>
-          <NavItem id="catalogo" icono="bi-shop">Catálogo</NavItem>
-          <NavItem id="realizar" icono="bi-cart-plus">Realizar Pedido</NavItem>
-          <NavItem id="pedidos" icono="bi-clock-history">Mis Pedidos</NavItem>
-          <NavItem id="estado" icono="bi-broadcast">Estado del Pedido</NavItem>
+          {navItem("dashboard", "bi-grid-1x2", "Dashboard")}
+          {navItem("catalogo", "bi-shop", "Catálogo")}
+          {navItem("realizar", "bi-cart-plus", "Realizar Pedido")}
+          {navItem("pedidos", "bi-clock-history", "Mis Pedidos")}
+          {navItem("estado", "bi-broadcast", "Estado del Pedido")}
           <div className="cl-nav-sep">Cuenta</div>
-          <NavItem id="config" icono="bi-gear">Configuración</NavItem>
+          {navItem("config", "bi-gear", "Configuración")}
         </nav>
 
         <button className="btn-nuevo-pedido" onClick={() => irA("realizar")}>

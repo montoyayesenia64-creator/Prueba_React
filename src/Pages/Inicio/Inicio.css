@@ -504,3 +504,10 @@
         padding: 20px;
     }
 }
+
+/* Estilos que antes eran globales (body) en la rama Eilin; ahora solo afectan a Inicio */
+.pagina-inicio {
+    min-height: 100vh;
+    background-color: #09090D;
+    font-family: Arial, sans-serif;
+}

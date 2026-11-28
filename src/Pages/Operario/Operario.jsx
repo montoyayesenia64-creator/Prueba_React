@@ -1,4 +1,3 @@
-import React from 'react';
 import './Operario.css';
 import { 
   LayoutDashboard, 
@@ -35,23 +34,23 @@ export default function OperarioDashboard() {
 
           {/* Menú de Navegación */}
           <nav className="sidebar-nav">
-            <a href="#" className="nav-item active">
+            <a href="#/operario" className="nav-item active">
               <LayoutDashboard className="w-5 h-5" />
               Dashboard
             </a>
-            <a href="#" className="nav-item">
+            <a href="#/operario" className="nav-item">
               <Package className="w-5 h-5" />
               Materiales
             </a>
-            <a href="#" className="nav-item">
+            <a href="#/operario" className="nav-item">
               <ClipboardList className="w-5 h-5" />
               Pedidos
             </a>
-            <a href="#" className="nav-item">
+            <a href="#/operario" className="nav-item">
               <Calculator className="w-5 h-5" />
               Cálculos
             </a>
-            <a href="#" className="nav-item">
+            <a href="#/operario" className="nav-item">
               <Settings className="w-5 h-5" />
               Configuración
             </a>
@@ -165,7 +164,7 @@ export default function OperarioDashboard() {
               </div>
 
               <div className="view-all-container">
-                <a href="#" className="view-all-link">ver todos →</a>
+                <a href="#/operario" className="view-all-link">ver todos →</a>
               </div>
             </div>
 
